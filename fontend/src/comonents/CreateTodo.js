@@ -1,4 +1,4 @@
-import {Button, Form} from "react-bootstrap";
+import {Button, Col, Form, Row} from "react-bootstrap";
 import {useCallback, useState} from "react";
 
 function CreateTodo ({onAddTodo}) {
@@ -19,28 +19,37 @@ function CreateTodo ({onAddTodo}) {
       body: JSON.stringify({name, status})
     });
     const todo = await response.json();
-    onAddTodo(todo)
+    onAddTodo(todo);
+    setName('');
+    setStatus('');
   }, [name, status, onAddTodo])
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="formBasicName">
-        <Form.Label>Name</Form.Label>
-        <Form.Control type="text" placeholder="Enter name" value={name} onChange={(e) => setName(e.target.value)}/>
-      </Form.Group>
-
-      <Form.Group controlId="formBasicStatus">
-        <Form.Label>Status</Form.Label>
-        <Form.Control as="select" custom value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option />
-          <option value="pending">Pending</option>
-          <option value="done">Done</option>
-          <option value="reject">Reject</option>
-        </Form.Control>
-      </Form.Group>
-      <Button variant="primary" type="submit">
-        Create
-      </Button>
+      <Row className="flex-row align-items-center">
+        <Col md={2}>
+          <Button variant="primary" type="submit">
+            Create
+          </Button>
+        </Col>
+        <Col md={5}>
+          <Form.Group controlId="formBasicStatus">
+            <Form.Label>Status</Form.Label>
+            <Form.Control as="select" custom value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option />
+              <option value="pending">Pending</option>
+              <option value="done">Done</option>
+              <option value="reject">Reject</option>
+            </Form.Control>
+          </Form.Group>
+        </Col>
+        <Col md={5}>
+          <Form.Group controlId="formBasicName">
+            <Form.Label>Name</Form.Label>
+            <Form.Control type="text" placeholder="Enter name" value={name} onChange={(e) => setName(e.target.value)}/>
+          </Form.Group>
+        </Col>
+      </Row>
     </Form>
   )
 }

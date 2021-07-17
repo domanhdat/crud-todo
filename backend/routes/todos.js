@@ -9,23 +9,16 @@ router.get('/', async function(req, res, next) {
     //   if (error) throw error;
     //   res.json(results);
     // })
-    res.json([
-      {
-        id: 1,
-        name: 'test',
-        status: 'done'
-      },
-      {
-        id: 2,
-        name: 'test 2',
-        status: 'done'
-      },
-      {
-        id: 3,
-        name: 'test 3',
-        status: 'done'
+    res.json([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12].map(number => ({
+      id: number,
+      name: `test ${number}`,
+      status: 'done'
+    })).filter(({name}) => {
+      if (!req.query.keyword) {
+        return true;
       }
-    ]);
+      return !!name.includes(req.query.keyword)
+    }));
   } catch (e) {
     res.json(e.message).status(500);
   }

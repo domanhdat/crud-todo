@@ -1,9 +1,11 @@
 import {useCallback, useEffect, useState} from "react";
 import Datatable from 'react-bs-datatable';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 import CreateTodo from "./comonents/CreateTodo";
-import {Button, Col, Container, Modal, Row} from "react-bootstrap";
+import {Container, Modal} from "react-bootstrap";
 import UpdateTodo from "./comonents/UpdateTodo";
+import SearchTodo from "./comonents/SearchTodo";
 
 function App() {
   const [data, setData] = useState([]);
@@ -42,28 +44,25 @@ function App() {
 
   const handleDeleteTodo = useCallback((id) => {
     const index = data.findIndex(val => val.id === id);
-    console.log('index', index);
     setShow(false);
     if (index === -1) {
       return;
     }
     const newData = [...data];
     newData.splice(index, 1);
-    console.log(newData);
     setData(newData);
   }, [data])
 
   return (
-    <Container>
-      <Row className="justify-content-center py-4">
-        <Col md={4}>
-          <CreateTodo onAddTodo={handleAddTodo}/>
-        </Col>
-      </Row>
+    <Container className="py-5">
+      <SearchTodo onAddTodos={todos => setData(todos)}/>
+      <CreateTodo onAddTodo={handleAddTodo}/>
       <Datatable
         tableHeaders={header}
         tableBody={data}
         onRowClick={handleShowUpdateTodo}
+        rowsPerPage={5}
+        initialSort={{ prop: 'name', isAscending: true }}
       />
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -79,8 +78,8 @@ function App() {
 }
 
 const header = [
-  { title: 'ID', prop: 'id' },
-  { title: 'Name', prop: 'name' },
+  { title: 'ID', prop: 'id', sortable: true },
+  { title: 'Name', prop: 'name', sortable: true },
   { title: 'Status', prop: 'status' },
 ];
 
